@@ -54,6 +54,9 @@ body {
     margin-bottom: 20px;
     position: relative;
     text-align: center;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    word-break: break-word;
 }
 
 #card-text {
@@ -186,4 +189,91 @@ select#deck-select {
     border-radius: 6px;
     cursor: pointer;
     background-color: white;
+}
+
+.list-section {
+    background: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    border: 1px solid var(--light-grey);
+}
+
+.list-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+    border-bottom: 2px dashed #eee;
+    padding-bottom: 10px;
+}
+
+.list-header h3 {
+    margin: 0;
+    color: var(--dark);
+    font-family: 'Courier New', monospace;
+}
+
+.cards-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 15px;
+    max-height: 400px;
+    overflow-y: auto;
+    padding-right: 5px;
+}
+
+.mini-card {
+    background: var(--bg-color);
+    border: 1px solid #ddd;
+    padding: 15px;
+    border-radius: 6px;
+    position: relative;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.02);
+    word-wrap: break-word;
+}
+
+.mini-card strong {
+    display: block;
+    color: var(--dark);
+    margin-bottom: 5px;
+    font-size: 1.1rem;
+    border-bottom: 1px solid #eee;
+    padding-bottom: 5px;
+}
+
+.mini-card span {
+    color: #555;
+    display: block;
+    margin-bottom: 10px;
+    font-size: 0.95rem;
+}
+
+.mini-badge {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: var(--orange);
+    color: white;
+    font-size: 0.7rem;
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-weight: bold;
+}
+
+.btn-delete-mini {
+    width: 100%;
+    padding: 5px;
+    font-size: 0.85rem;
+    background: transparent;
+    border: 1px solid var(--danger);
+    color: var(--danger);
+    border-radius: 4px;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.btn-delete-mini:hover {
+    background: var(--danger);
+    color: white;
 }

@@ -23,12 +23,16 @@
         <section class="deck-controls">
             <div class="input-group">
                 <select id="deck-select" class="btn btn-outline" title="Select Deck"></select>
-                <button id="btn-new-deck" class="btn btn-secondary" title="New Deck"><i class="fa-solid fa-folder-plus"></i></button>
-                <button id="btn-delete-deck" class="btn btn-danger" title="Delete Deck"><i class="fa-solid fa-trash"></i></button>
+                <button id="btn-new-deck" class="btn btn-secondary" title="New Deck"><i
+                        class="fa-solid fa-folder-plus"></i></button>
+                <button id="btn-view-list" class="btn btn-outline" title="View All Cards"><i
+                        class="fa-solid fa-list"></i></button>
+                <button id="btn-delete-deck" class="btn btn-danger" title="Delete Deck"><i
+                        class="fa-solid fa-trash"></i></button>
             </div>
         </section>
 
-        <section class="card-section">
+        <section id="review-section" class="card-section">
             <div id="flashcard" class="flashcard">
                 <div class="card-content" id="card-content">
                     <p id="card-text">Welcome! Add some cards to start learning.</p>
@@ -45,7 +49,16 @@
             </div>
         </section>
 
-        <section class="add-section">
+        <section id="list-section" class="list-section hidden">
+            <div class="list-header">
+                <h3><i class="fa-solid fa-book-open"></i> Cards in "<span id="list-deck-name"></span>"</h3>
+                <button id="btn-close-list" class="btn btn-outline"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <div id="cards-grid" class="cards-grid">
+            </div>
+        </section>
+
+        <section id="add-section" class="add-section">
             <h3><i class="fa-solid fa-plus"></i> Add New Card</h3>
             <div class="input-group">
                 <input type="text" id="input-front" placeholder="Front (e.g., const in C)">

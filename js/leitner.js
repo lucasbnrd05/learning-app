@@ -8,9 +8,7 @@ class LeitnerSystem {
         localStorage.setItem(this.storageKey, JSON.stringify(this.cards));
     }
 
-    
     getDecks() {
-        
         const decks = [...new Set(this.cards.map(c => c.deck || "Default"))];
         if (decks.length === 0) return ["Default"];
         return decks;
@@ -31,52 +29,62 @@ class LeitnerSystem {
 
     getNextCard(deckName) {
         const now = Date.now();
-        
         const deckCards = this.cards.filter(c => (c.deck || "Default") === deckName);
         const dueCards = deckCards.filter(c => c.nextReview <= now);
 
         if (dueCards.length === 0) return null;
 
-        dueCards.sort((a, b) => a.box - b.box);
-        return dueCards[0]; 
+        dueCards.sort((a, b) => {
+            if (a.box !== b.box) return a.box - b.box;
+            return a.nextReview - b.nextReview;
+        });
+
+        return dueCards[0];
     }
 
     recordResult(cardId, success) {
         const card = this.cards.find(c => c.id === cardId);
         if (!card) return;
 
-        const ONE_DAY = 24 * 60 * 60 * 1000;
-        const intervals = {
-            1: 0,           
-            2: 1 * ONE_DAY, 
-            3: 3 * ONE_DAY, 
-            4: 7 * ONE_DAY, 
-            5: 14 * ONE_DAY 
+        const intervalsInDays = {
+            1: 0,
+            2: 1,
+            3: 3,
+            4: 7,
+            5: 14
         };
 
         if (success) {
             card.box = Math.min(card.box + 1, 5);
+            const nextDate = new Date();
+            nextDate.setHours(0, 0, 0, 0);
+            nextDate.setDate(nextDate.getDate() + intervalsInDays[card.box]);
+
+            card.nextReview = nextDate.getTime();
         } else {
             card.box = 1;
+            card.nextReview = Date.now();
         }
 
-        card.nextReview = Date.now() + intervals[card.box];
         this.save();
     }
 
-    
     deleteDeck(deckName) {
-        
         this.cards = this.cards.filter(c => (c.deck || "Default") !== deckName);
         this.save();
     }
-    
+
+    deleteCard(cardId) {
+        this.cards = this.cards.filter(c => c.id !== cardId);
+        this.save();
+    }
+
     exportData() {
         const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(this.cards));
         const downloadAnchorNode = document.createElement('a');
         downloadAnchorNode.setAttribute("href", dataStr);
         downloadAnchorNode.setAttribute("download", "buzzcut_learning_backup.json");
-        document.body.appendChild(downloadAnchorNode); 
+        document.body.appendChild(downloadAnchorNode);
         downloadAnchorNode.click();
         downloadAnchorNode.remove();
     }
@@ -88,7 +96,7 @@ class LeitnerSystem {
                 this.cards = parsed.map(c => ({
                     ...c,
                     nextReview: c.nextReview || Date.now(),
-                    deck: c.deck || "Default" 
+                    deck: c.deck || "Default"
                 }));
                 this.save();
                 return true;
