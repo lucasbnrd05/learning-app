@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Buzzcut Learning | Leitner System</title>
+
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="manifest" href="manifest.json">
+    <link rel="icon" type="image/png" sizes="32x32" href="doc/favicon-32x32.png">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+</head>
+
+<body>
+
+    <div class="app-container">
+        <header class="header">
+            <h1><i class="fa-solid fa-brain"></i> Buzzcut Learning</h1>
+            <p class="subtitle">Spaced Repetition System</p>
+        </header>
+
+        <section class="deck-controls">
+            <div class="input-group">
+                <select id="deck-select" class="btn btn-outline" title="Select Deck"></select>
+                <button id="btn-new-deck" class="btn btn-secondary" title="New Deck"><i class="fa-solid fa-folder-plus"></i></button>
+                <button id="btn-delete-deck" class="btn btn-danger" title="Delete Deck"><i class="fa-solid fa-trash"></i></button>
+            </div>
+        </section>
+
+        <section class="card-section">
+            <div id="flashcard" class="flashcard">
+                <div class="card-content" id="card-content">
+                    <p id="card-text">Welcome! Add some cards to start learning.</p>
+                    <span id="card-box-badge" class="badge hidden">Box 1</span>
+                </div>
+            </div>
+
+            <div class="controls">
+                <button id="btn-reveal" class="btn btn-primary hidden">Show Answer</button>
+                <div id="action-buttons" class="hidden action-group">
+                    <button id="btn-fail" class="btn btn-danger"><i class="fa-solid fa-xmark"></i> Again</button>
+                    <button id="btn-success" class="btn btn-success"><i class="fa-solid fa-check"></i> Got it</button>
+                </div>
+            </div>
+        </section>
+
+        <section class="add-section">
+            <h3><i class="fa-solid fa-plus"></i> Add New Card</h3>
+            <div class="input-group">
+                <input type="text" id="input-front" placeholder="Front (e.g., const in C)">
+                <input type="text" id="input-back" placeholder="Back (e.g., Read-only variable)">
+                <button id="btn-add" class="btn btn-secondary">Add</button>
+            </div>
+        </section>
+
+        <section class="sync-section">
+            <h3><i class="fa-solid fa-cloud-arrow-up"></i> Data Sync</h3>
+            <div class="sync-group">
+                <button id="btn-export" class="btn btn-outline"><i class="fa-solid fa-download"></i> Export
+                    Data</button>
+                <label for="input-import" class="btn btn-outline cursor-pointer">
+                    <i class="fa-solid fa-upload"></i> Import Data
+                </label>
+                <input type="file" id="input-import" accept=".json" class="hidden">
+            </div>
+            <p class="sync-info">Export your data to transfer between your PC and Phone.</p>
+        </section>
+    </div>
+
+    <script src="js/leitner.js"></script>
+    <script src="js/app.js"></script>
+</body>
+
+</html>
