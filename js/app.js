@@ -1,7 +1,6 @@
 document.addEventListener("DOMContentLoaded", () => {
     const leitner = new LeitnerSystem();
 
-
     const cardText = document.getElementById("card-text");
     const cardBadge = document.getElementById("card-box-badge");
     const btnReveal = document.getElementById("btn-reveal");
@@ -9,20 +8,16 @@ document.addEventListener("DOMContentLoaded", () => {
     const btnSuccess = document.getElementById("btn-success");
     const btnFail = document.getElementById("btn-fail");
 
-
     const inputFront = document.getElementById("input-front");
     const inputBack = document.getElementById("input-back");
     const btnAdd = document.getElementById("btn-add");
-
 
     const deckSelect = document.getElementById("deck-select");
     const btnNewDeck = document.getElementById("btn-new-deck");
     const btnDeleteDeck = document.getElementById("btn-delete-deck");
 
-
     const btnExport = document.getElementById("btn-export");
     const inputImport = document.getElementById("input-import");
-
 
     const btnViewList = document.getElementById("btn-view-list");
     const reviewSection = document.getElementById("review-section");
@@ -35,14 +30,27 @@ document.addEventListener("DOMContentLoaded", () => {
     let currentCard = null;
     let showingFront = true;
     let currentDeck = "Default";
+    let addBtnTimeout = null; 
 
     if ("serviceWorker" in navigator) {
         navigator.serviceWorker.register("sw.js").catch(err => console.error("SW Config:", err));
     }
 
-
+    
     function updateDeckList() {
         const decks = leitner.getDecks();
+        
+        
+        
+        if (currentDeck !== "Default" && !decks.includes(currentDeck)) {
+            
+            const isDeckEmptyButJustCreated = leitner.cards.filter(c => (c.deck || "Default") === currentDeck).length === 0 && deckSelect.querySelector(`option[value="${currentDeck}"]`);
+            if(!isDeckEmptyButJustCreated) {
+                currentDeck = decks[0];
+            }
+        }
+
+        
         if (currentDeck && !decks.includes(currentDeck)) decks.push(currentDeck);
 
         deckSelect.innerHTML = "";
@@ -80,7 +88,7 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     });
 
-
+    
     function renderList() {
         listDeckName.innerText = currentDeck;
         cardsGrid.innerHTML = "";
@@ -102,10 +110,10 @@ document.addEventListener("DOMContentLoaded", () => {
                 <button class="btn-delete-mini" data-id="${card.id}"><i class="fa-solid fa-trash"></i> Delete</button>
             `;
 
-
             cardEl.querySelector('.btn-delete-mini').addEventListener('click', function () {
                 if (confirm("Delete this card?")) {
                     leitner.deleteCard(card.id);
+                    updateDeckList(); 
                     renderList();
                     loadNextCard();
                 }
@@ -128,7 +136,7 @@ document.addEventListener("DOMContentLoaded", () => {
         addSection.classList.remove("hidden");
     });
 
-
+    
     function loadNextCard() {
         currentCard = leitner.getNextCard(currentDeck);
         showingFront = true;
@@ -170,6 +178,7 @@ document.addEventListener("DOMContentLoaded", () => {
         loadNextCard();
     });
 
+    
     btnAdd.addEventListener("click", () => {
         const front = inputFront.value;
         const back = inputBack.value;
@@ -181,18 +190,22 @@ document.addEventListener("DOMContentLoaded", () => {
             if (!currentCard) loadNextCard();
             if (!listSection.classList.contains("hidden")) renderList();
 
+            
+            if(addBtnTimeout) clearTimeout(addBtnTimeout);
             btnAdd.innerText = "Added!";
-            setTimeout(() => btnAdd.innerText = "Add", 1000);
+            addBtnTimeout = setTimeout(() => btnAdd.innerText = "Add", 1000);
         }
     });
+
+    
     inputBack.addEventListener("keypress", (e) => {
-        if (e.key === "Enter") {
+        if (e.key === "Enter" && inputFront.value.trim() !== "" && inputBack.value.trim() !== "") {
             btnAdd.click();
             inputFront.focus();
         }
     });
 
-
+    
     btnExport.addEventListener("click", () => leitner.exportData());
 
     inputImport.addEventListener("change", (e) => {
@@ -211,7 +224,7 @@ document.addEventListener("DOMContentLoaded", () => {
         reader.readAsText(file);
     });
 
-
+    
     updateDeckList();
     loadNextCard();
 });

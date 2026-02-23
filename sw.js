@@ -1,4 +1,4 @@
-const CACHE_NAME = "buzzcut-learning-v2";
+const CACHE_NAME = "buzzcut-learning-v3";
 const ASSETS = [
     "./",
     "./index.html",

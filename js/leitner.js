@@ -20,7 +20,7 @@ class LeitnerSystem {
             front: front.trim(),
             back: back.trim(),
             box: 1,
-            nextReview: Date.now(),
+            nextReview: Date.now(), 
             deck: deckName || "Default"
         };
         this.cards.push(newCard);
@@ -46,26 +46,28 @@ class LeitnerSystem {
         const card = this.cards.find(c => c.id === cardId);
         if (!card) return;
 
+        
         const intervalsInDays = {
-            1: 0,
-            2: 1,
-            3: 3,
-            4: 7,
-            5: 14
+            1: 1, 
+            2: 2, 
+            3: 4, 
+            4: 7, 
+            5: 14 
         };
 
         if (success) {
             card.box = Math.min(card.box + 1, 5);
-            const nextDate = new Date();
-            nextDate.setHours(0, 0, 0, 0);
-            nextDate.setDate(nextDate.getDate() + intervalsInDays[card.box]);
-
-            card.nextReview = nextDate.getTime();
         } else {
-            card.box = 1;
-            card.nextReview = Date.now();
+            card.box = 1; 
         }
 
+        
+        const nextDate = new Date();
+        nextDate.setHours(0, 0, 0, 0);
+        nextDate.setDate(nextDate.getDate() + intervalsInDays[card.box]);
+
+        
+        card.nextReview = nextDate.getTime();
         this.save();
     }
 
